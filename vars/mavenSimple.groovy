@@ -1,16 +1,19 @@
-def call() {
+def call(Map config) {
     pipeline {
     agent any
+    tools {
+        maven "${config.maven}"
+    }
     stages {
         stage('git') {
          steps {
-           git url: https://github.com/spring-projects/spring-petclinic.git
-           branch : main
+           git url: "${config.gitUrl}",
+           branch:  "${config.gitBranch}"
     }
         }
         stage('build') {
             steps {
-                sh 'mvn clean package'
+                sh "mvn ${config.goals}"
             }
         }
 
